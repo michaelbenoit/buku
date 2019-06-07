@@ -13,4 +13,19 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>buku-descgen-lib</artifactId>
 
+
+    <dependencies>
+
+        <!-- 3'rd party -->
+        <dependency>
+            <groupId>org.reflections</groupId>
+            <artifactId>reflections</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+    </dependencies>
 </project>

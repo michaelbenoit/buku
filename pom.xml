@@ -92,6 +92,11 @@
                 <artifactId>reflections</artifactId>
                 <version>0.9.10</version>
             </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>1.7.26</version>
+            </dependency>
 
             <!-- Test -->
             <dependency>

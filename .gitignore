@@ -1,2 +1,8 @@
+
+# IDE
 *.iml
 .idea
+
+# MAVEN
+target/*
+

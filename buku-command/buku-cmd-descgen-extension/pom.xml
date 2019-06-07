@@ -26,6 +26,22 @@
             <artifactId>buku-cmd-lib</artifactId>
         </dependency>
 
+        <!-- bukkit -->
+        <dependency>
+            <groupId>org.bukkit</groupId>
+            <artifactId>bukkit</artifactId>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- 3'rd party -->
+        <dependency>
+            <groupId>org.reflections</groupId>
+            <artifactId>reflections</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
 
     </dependencies>
 </project>

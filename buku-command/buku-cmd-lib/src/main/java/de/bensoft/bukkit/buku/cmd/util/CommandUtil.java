@@ -22,6 +22,15 @@ public class CommandUtil {
         });
     }
 
+    public static List<AbstractBukuCommand> getRootCommands() {
+        final Reflections reflections = new Reflections();
+        return reflections.getTypesAnnotatedWith(BukuCommand.class).stream().filter(t -> {
+            final BukuCommand annotation = t.getAnnotation(BukuCommand.class);
+            return annotation.isRootCommand();
+        }).map(t -> getCommandInstance((Class<AbstractBukuCommand>) t))
+                .collect(Collectors.toList());
+    }
+
     public static List<AbstractBukuCommand> getRootCommands(String rootPackage) {
         final Reflections reflections = new Reflections(rootPackage);
         return reflections.getTypesAnnotatedWith(BukuCommand.class).stream().filter(t -> {
