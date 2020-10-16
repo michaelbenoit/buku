@@ -11,6 +11,7 @@
 
 
     <modules>
+        <module>bom</module>
         <module>buku-command</module>
         <module>buku-descgen</module>
         <module>buku-i18n</module>
@@ -50,6 +51,7 @@
             <id>vault-repo</id>
             <url>http://nexus.hc.to/content/repositories/pub_releases</url>
         </repository>
+
     </repositories>
 
     <dependencyManagement>
@@ -80,9 +82,15 @@
 
             <!-- bukkit -->
             <dependency>
+                <groupId>org.spigotmc</groupId>
+                <artifactId>spigot-api</artifactId>
+                <version>1.16.3-R0.1-SNAPSHOT</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
                 <groupId>org.bukkit</groupId>
                 <artifactId>bukkit</artifactId>
-                <version>${version.bukkit}</version>
+                <version>1.15.2-R0.1-SNAPSHOT</version>
                 <scope>provided</scope>
             </dependency>
 
@@ -94,9 +102,10 @@
             </dependency>
             <dependency>
                 <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-api</artifactId>
-                <version>1.7.26</version>
+                <artifactId>slf4j-jdk14</artifactId>
+                <version>1.7.30</version>
             </dependency>
+
 
             <!-- Test -->
             <dependency>

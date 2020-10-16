@@ -5,7 +5,11 @@ import org.bukkit.entity.Player;
 
 import java.lang.reflect.Method;
 import java.text.MessageFormat;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 
 /**
  * Created by michaelbenoit on 31.01.17.
@@ -18,11 +22,12 @@ public class I18nUtil {
 
     private static ResourceBundle getBundle(final I18nMessage message, final String language) {
         if (bundleMap.containsKey(message.getClass().getCanonicalName() + language)) {
-            return bundleMap.get(language);
+            return bundleMap.get(message.getClass().getCanonicalName() + language);
         } else {
             final Locale locale = Locale.forLanguageTag(language);
+            final String path = message.getClass().getCanonicalName().replaceAll("\\.", "/");
             final ResourceBundle resourceBundle = ResourceBundle.getBundle(
-                    message.getClass().getCanonicalName().replaceAll("\\.", "/"),
+                    path,
                     locale,
                     I18nUtil.class.getClassLoader());
 
@@ -65,7 +70,7 @@ public class I18nUtil {
         } catch (MissingResourceException e) {
             return "???UNABLE_TO_GET_I18N_VAL???";
         }
-        if (replacements != null) {
+        if (replacements != null && replacements.length > 0) {
             return MessageFormat.format(msg, replacements);
         } else {
             return msg;
@@ -73,7 +78,7 @@ public class I18nUtil {
     }
 
     private static String getPlayerLanguage(Player p) {
-        return p.getLocale();
+        return p.getLocale().replaceAll("_", "-");
         /*try {
             final Method m = getMethod("getHandle", p.getClass());
             final Object handle = m.invoke(p, (Object[]) null);

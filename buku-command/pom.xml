@@ -17,7 +17,6 @@
 
     <modules>
         <module>buku-cmd-lib</module>
-        <module>buku-cmd-descgen-extension</module>
     </modules>
 
 </project>

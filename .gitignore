@@ -4,5 +4,5 @@
 .idea
 
 # MAVEN
-target/*
+target/
 

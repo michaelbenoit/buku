@@ -1,44 +1,37 @@
-package de.bensoft.bukkit.buku.cmd;
+package de.bensoft.bukkit.buku.cmd.api;
 
-import de.bensoft.bukkit.buku.cmd.exception.BukuCommandException;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
 import java.util.Arrays;
 
-public abstract class AbstractBukuCommand implements CommandExecutor {
+public abstract class AbstractBukuCommand {
 
-    @Override
-    public boolean onCommand(CommandSender sender,
-                             Command command,
-                             String label,
-                             String[] args) {
+    public boolean onCommand(final CommandSender sender,
+                             final String[] arguments) {
 
-        final QualifiedName qualifiedName = new QualifiedName(args).skip(1);
+        return execute(sender);
+
+       /* final QualifiedName qualifiedName = new QualifiedName(args);
         final BukuCommand cmdAnnotation = this.getClass().getAnnotation(BukuCommand.class);
 
-        if (cmdAnnotation.subcommands().length == 0 || qualifiedName.isEmpty()) {
+        if (cmdAnnotation.subCommands().length == 0 || qualifiedName.isEmpty()) {
             return execute(sender);
         } else {
             final Class<? extends AbstractBukuCommand> subCmd = findSubcommand(qualifiedName.get(0), cmdAnnotation);
-            if(subCmd != null) {
+            if (subCmd != null) {
                 try {
                     final AbstractBukuCommand abstractCommand = subCmd.newInstance();
-                    return abstractCommand.onCommand(sender, command, label, qualifiedName.toArray(new String[qualifiedName.size()]));
+                    return abstractCommand.onCommand(sender, qualifiedName.toArray(new String[qualifiedName.size()]));
                 } catch (InstantiationException | IllegalAccessException e) {
                     throw new BukuCommandException(e);
                 }
             }
         }
-
-
-        return false;
+        return false;*/
     }
 
-
     public Class<? extends AbstractBukuCommand> findSubcommand(String keyword, BukuCommand cmd) {
-        return Arrays.asList(cmd.subcommands())
+        return Arrays.asList(cmd.subCommands())
                 .stream()
                 .filter(subCommand -> {
                     final BukuCommand subCmdAnnotation = subCommand.getAnnotation(BukuCommand.class);
@@ -46,11 +39,6 @@ public abstract class AbstractBukuCommand implements CommandExecutor {
                 })
                 .findFirst()
                 .orElse(null);
-    }
-
-    public String getIdentifier() {
-        final BukuCommand annotation = getClass().getAnnotation(BukuCommand.class);
-        return annotation.identifier();
     }
 
     protected abstract boolean execute(CommandSender sender);
