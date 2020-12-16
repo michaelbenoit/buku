@@ -1,11 +1,11 @@
 package de.bensoft.bukkit.buku.cmd.test.simple;
 
-import de.bensoft.bukkit.buku.cmd.api.AbstractBukuPlayerCommand;
-import de.bensoft.bukkit.buku.cmd.api.BukuCommand;
+import de.bensoft.bukkit.buku.cmd.api.AbstractPlayerCommand;
+import de.bensoft.bukkit.buku.cmd.api.Command;
 import org.bukkit.entity.Player;
 
-@BukuCommand(identifier = "sub", description = "test")
-public class SimpleTestSubCommand extends AbstractBukuPlayerCommand {
+@Command(identifier = "sub", description = "test")
+public class SimpleTestSubCommand extends AbstractPlayerCommand {
 
     @Override
     protected boolean execute(Player player) {

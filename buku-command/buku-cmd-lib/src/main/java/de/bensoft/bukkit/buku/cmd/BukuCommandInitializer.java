@@ -1,5 +1,6 @@
 package de.bensoft.bukkit.buku.cmd;
 
+import de.bensoft.bukkit.buku.cmd.registry.QualifierRegistry;
 import de.bensoft.bukkit.buku.cmd.util.CommandDiscoveryUtil;
 import de.bensoft.bukkit.buku.cmd.util.CommandRegistrationUtil;
 import de.bensoft.bukkit.buku.cmd.util.model.BukuCommandDescription;
@@ -30,10 +31,11 @@ public class BukuCommandInitializer {
                 .getFile();
         System.setProperty("java.util.logging.config.file", path);
 
+        QualifierRegistry.getInstance().init(commandRootPackage);
+
         final List<BukuCommandDescription> bukuCommandDescriptions = CommandDiscoveryUtil
                 .instance()
                 .collectRootCommands(commandRootPackage);
-
         CommandRegistrationUtil.instance().registerCommands(bukuCommandDescriptions);
     }
 }

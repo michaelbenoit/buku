@@ -1,6 +1,6 @@
 package de.bensoft.bukkit.buku.cmd.util;
 
-import de.bensoft.bukkit.buku.cmd.api.BukuCommand;
+import de.bensoft.bukkit.buku.cmd.api.Command;
 import de.bensoft.bukkit.buku.cmd.exception.BukuCommandException;
 import de.bensoft.bukkit.buku.cmd.util.model.BukuCommandDescription;
 import org.reflections.Reflections;
@@ -8,9 +8,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static de.bensoft.bukkit.buku.cmd.util.ParameterHelper.buildParameterDescriptions;
 
 public class CommandDiscoveryUtil {
 
@@ -33,10 +37,10 @@ public class CommandDiscoveryUtil {
         final Reflections reflections = new Reflections(rootPackage);
 
         final List<BukuCommandDescription> rootCommands = reflections
-                .getTypesAnnotatedWith(BukuCommand.class)
+                .getTypesAnnotatedWith(Command.class)
                 .stream()
                 .map(commandType -> {
-                    final BukuCommand annotation = commandType.getAnnotation(BukuCommand.class);
+                    final Command annotation = commandType.getAnnotation(Command.class);
                     return Pair.of(annotation, (Class) commandType);
                 })
                 .filter(pair -> pair.getLeft().isRootCommand())
@@ -52,9 +56,9 @@ public class CommandDiscoveryUtil {
     }
 
     private BukuCommandDescription processCommandStructure(
-            final Pair<BukuCommand, Class> element,
+            final Pair<Command, Class> element,
             final BukuCommandDescription parent) {
-        final BukuCommand bukuCommand = element.getLeft();
+        final Command bukuCommand = element.getLeft();
 
         final StringBuilder sbFullIdentifier = new StringBuilder();
         if (parent != null) {
@@ -63,23 +67,47 @@ public class CommandDiscoveryUtil {
         }
         sbFullIdentifier.append(bukuCommand.identifier());
 
+
         final BukuCommandDescription commandDescription = new BukuCommandDescription(
                 sbFullIdentifier.toString(),
                 parent,
                 bukuCommand,
                 element.getRight()
         );
+        commandDescription.getParameters().addAll(buildParameterDescriptions(commandDescription));
+
+        if (parent != null && !parent.getFullAliases().isEmpty()) {
+            // Register all local presentations, prefixed by parents aliases
+            final List<String> localCommandRepresentations = new ArrayList<>();
+            localCommandRepresentations.add(bukuCommand.identifier());
+            localCommandRepresentations.addAll(Arrays.asList(bukuCommand.aliases()));
+
+            final List<String> aliases = localCommandRepresentations
+                    .stream()
+                    .map(localCommand -> parent.getFullAliases()
+                            .stream()
+                            .map(parentAlias -> String.join(" ", parentAlias, localCommand))
+                            .collect(Collectors.toList())
+                    )
+                    .flatMap(Collection::stream)
+                    .collect(Collectors.toList());
+            commandDescription.getFullAliases().addAll(aliases);
+
+        } else if (bukuCommand.aliases().length > 0) {
+            commandDescription.getFullAliases().addAll(Arrays.asList(bukuCommand.aliases()));
+        }
+
         if (parent != null) {
             parent.getChildren().add(commandDescription);
         }
 
         Arrays.asList(bukuCommand.subCommands())
                 .forEach(subCommandClass -> {
-                    final BukuCommand subCommandAnnotation = subCommandClass.getAnnotation(BukuCommand.class);
+                    final Command subCommandAnnotation = subCommandClass.getAnnotation(Command.class);
                     if (subCommandAnnotation == null) {
                         throw new BukuCommandException(
                                 MessageFormat.format(
-                                        "Error during command disovery. The sub command {0} must be annotated with @BukuCommand!",
+                                        "Error during command discovery. The sub command {0} must be annotated with @BukuCommand!",
                                         subCommandClass.getCanonicalName()
                                 )
                         );

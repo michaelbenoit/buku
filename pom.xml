@@ -13,8 +13,9 @@
     <modules>
         <module>bom</module>
         <module>buku-command</module>
-        <module>buku-descgen</module>
         <module>buku-i18n</module>
+        <module>buku-config</module>
+        <module>buku-persistence</module>
     </modules>
 
 
@@ -98,7 +99,7 @@
             <dependency>
                 <groupId>org.reflections</groupId>
                 <artifactId>reflections</artifactId>
-                <version>0.9.10</version>
+                <version>0.9.12</version>
             </dependency>
             <dependency>
                 <groupId>org.slf4j</groupId>

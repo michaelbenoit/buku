@@ -29,6 +29,19 @@
                 <version>${project.version}</version>
             </dependency>
 
+            <!-- CONFIG -->
+            <dependency>
+                <groupId>de.bensoft.bukkit.buku</groupId>
+                <artifactId>buku-config</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <!-- PERSISTENCE -->
+            <dependency>
+                <groupId>de.bensoft.bukkit.buku</groupId>
+                <artifactId>buku-persistence</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
         </dependencies>
     </dependencyManagement>
